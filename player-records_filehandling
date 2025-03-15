@@ -1,0 +1,202 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+struct Player {
+    string nickname;
+    int age;
+    double scores[5];  // Array of 5 scores
+};
+
+struct Node {
+    Player player;
+    Node* next;
+};
+
+Node* head = NULL;
+
+void addRecord(const Player& player) {
+    Node* newNode = new Node;
+    newNode->player = player;
+    newNode->next = head;
+    head = newNode;
+}
+
+void viewRecords() {
+    Node* current = head;
+    while (current != NULL) {
+        cout << "Nickname: " << current->player.nickname << endl;
+        cout << "Age: " << current->player.age << endl;
+        cout << "Scores: ";
+        for (int i = 0; i < 5; ++i) {
+            cout << current->player.scores[i] << " ";
+        }
+        cout << endl;
+        cout << "	" << endl;
+        current = current->next;
+    }
+}
+
+void computeAverage() {
+    Node* current = head;
+    while (current != NULL) {
+        double sum = 0;
+        for (int i = 0; i < 5; ++i) {
+            sum += current->player.scores[i];
+        }
+        double average = sum / 5.0;
+        cout << "Nickname: " << current->player.nickname << endl;
+        cout << "Average Score: " << average << endl;
+        cout << "	" << endl;
+        current = current->next;
+    }
+}
+
+void showMaxAverage() {
+    Node* current = head;
+    double maxAverage = -1; // Initialize to a non-valid value
+
+    while (current != NULL) {
+        double sum = 0;
+        for (int i = 0; i < 5; ++i) {
+            sum += current->player.scores[i];
+        }
+        double average = sum / 5.0;
+        if (average > maxAverage) {
+            maxAverage = average;
+        }
+        current = current->next;
+    }
+
+    // Now, iterate again to display players with the max average
+    current = head;
+    while (current != NULL) {
+        double sum = 0;
+        for (int i = 0; i < 5; ++i) {
+            sum += current->player.scores[i];
+        }
+        double average = sum / 5.0;
+        if (average == maxAverage) {
+            cout << "Nickname: " << current->player.nickname << endl;
+            cout << "Average Score: " << average << endl;
+            cout << "	" << endl;
+        }
+        current = current->next;
+    }
+}
+
+void showMinAverage() {
+    Node* current = head;
+    double minAverage = 100; // Initialize to a value higher than the possible average
+
+    while (current != NULL) {
+	
+        double sum = 0;
+        for (int i = 0; i < 5; ++i) {
+            sum += current->player.scores[i];
+        }
+        double average = sum / 5.0;
+        if (average < minAverage) {
+            minAverage = average;
+        }
+        current = current->next;
+    }
+
+    // Now, iterate again to display players with the min average
+    current = head;
+    while (current != NULL) {
+        double sum = 0;
+        for (int i = 0; i < 5; ++i) {
+            sum += current->player.scores[i];
+        }
+        double average = sum / 5.0;
+        if (average == minAverage) {
+            cout << "Nickname: " << current->player.nickname << endl;
+            cout << "Average Score: " << average << endl;
+            cout << "	" << endl;
+        }
+        current = current->next;
+    }
+}
+
+void openFile() {
+    ofstream outFile("player_records.txt");
+    Node* current = head;
+    while (current != NULL) {
+        outFile << current->player.nickname << endl;
+        outFile << current->player.age << endl;
+        for (int i = 0; i < 5; ++i) {
+            outFile << current->player.scores[i] << " ";
+        }
+        outFile << endl;
+        current = current->next;
+    }
+    outFile.close();
+    cout << "Records saved to 'player_records.txt'." << endl;
+}
+
+void closeFile() {
+    cout << "File closed." << endl;
+}
+
+int main() {
+    int choice;
+    do {
+        cout << "\nMenu: \n";
+        cout << "1. Add Record \n2. View Record \n3. Compute Average \n4. Max Average \n5. Minimum Average \n6. Open File\n7. Close File \n8. Exit.";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(1000, '\n');
+            cout << "Invalid input. Please enter a number.\n";
+            continue;
+        }
+
+        switch (choice) {
+            case 1: {
+                Player player;
+                cout << "Enter Nickname: ";
+                cin >> player.nickname;
+                cout << "Enter Age: ";
+                cin >> player.age;
+                cout << "Enter Score 1: ";
+                cin >> player.scores[0];
+                cout << "Enter Score 2: ";
+                cin >> player.scores[1];
+                cout << "Enter Score 3: ";
+                cin >> player.scores[2];
+                cout << "Enter Score 4: ";
+                cin >> player.scores[3];
+                cout << "Enter Score 5: ";
+                cin >> player.scores[4];
+                addRecord(player);
+                break;
+            }
+            case 2:
+                viewRecords();
+                break;
+            case 3:
+                computeAverage();
+                break;
+            case 4:
+                showMaxAverage();
+                break;
+            case 5:
+                showMinAverage();
+                break;
+            case 6:
+                openFile();
+                break;
+            case 7: 
+                closeFile();
+                break;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    } while (choice != 6);
+
+    return 0;
+}
