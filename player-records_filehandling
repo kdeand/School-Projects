@@ -145,7 +145,7 @@ int main() {
     do {
         cout << "\nMenu: \n";
         cout << "1. Add Record \n2. View Record \n3. Compute Average \n4. Max Average \n5. Minimum Average \n6. Open File\n7. Close File \n8. Exit.";
-        cout << "Enter your choice: ";
+        cout << "\nEnter your choice: ";
         cin >> choice;
 
         if (cin.fail()) {
@@ -193,6 +193,9 @@ int main() {
             case 7: 
                 closeFile();
                 break;
+            case 8:
+            	cout << "\nExiting...";
+            	return 0;
             default:
                 cout << "Invalid choice. Please try again.\n";
         }
